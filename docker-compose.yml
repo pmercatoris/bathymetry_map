@@ -1,0 +1,40 @@
+version: '3.1'
+
+services:
+  postgis:
+    image: postgis/postgis:14-3.2
+    container_name: postgis_container
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  martin:
+    image: ghcr.io/maplibre/martin
+    container_name: martin_container
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@postgis:5432/mydb
+    depends_on:
+      - postgis
+    ports:
+    - "3000:3000"
+
+  node:
+    image: node:16
+    container_name: node_container
+    working_dir: /usr/src/app
+    volumes:
+      - ./basic-map:/usr/src/app
+    command: bash -c "npm install && npm start"
+    depends_on:
+      - postgis
+      - martin
+    ports:
+      - 5173:5173
+
+volumes:
+  postgis_data:

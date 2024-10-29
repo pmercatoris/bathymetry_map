@@ -1,0 +1,14 @@
+{
+	"name": "basic-map",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"scripts": {
+		"start": "vite --host"
+	},
+
+	"devDependencies": {
+		"maplibre-gl": "^4.7.1",
+		"vite": "^4.0.0"
+	}
+}
